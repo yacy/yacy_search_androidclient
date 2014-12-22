@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,10 +6,12 @@
     tools:context=".MainActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_awesome_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ActionBar" />
 
@@ -17,16 +19,11 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         android:fadingEdge="horizontal"
         android:requiresFadingEdge="horizontal"
         android:scrollbars="vertical" />
 
+    <include layout="@layout/include_fab" />
 
-    <ImageView
-        android:id="@+id/emptyElement"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_launcher" />
-
-</LinearLayout>
+</RelativeLayout>

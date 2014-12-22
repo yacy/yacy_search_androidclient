@@ -3,17 +3,16 @@ package de.audioattack.yacy31c3search.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchIntentService;
@@ -27,14 +26,17 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private LinearLayoutManager layoutManager;
     private MyAdapter adapter;
 
+    private android.support.v7.widget.SearchView searchView;
+
     private boolean openKeyboard;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         SearchIntentService.addSearchListener(this);
@@ -56,39 +58,32 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
         recyclerView.addItemDecoration(itemDecoration);
 
+
+        final View button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+
         handleIntent(getIntent());
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
-            MenuItem searchItem = menu.findItem(R.id.search);
-            SearchManager searchManager =
-                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-            android.support.v7.widget.SearchView searchView =
-                    (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView =
+                (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
 
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconified(false);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        } else {
-
-            // Associate searchable configuration with the SearchView
-            SearchManager searchManager =
-                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView =
-                    (SearchView) menu.findItem(R.id.search).getActionView();
-
-            searchView.setSearchableInfo(
-                    searchManager.getSearchableInfo(getComponentName()));
-            searchView.setIconified(false);
-
-        }
         return true;
     }
 
