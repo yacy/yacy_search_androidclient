@@ -1,40 +1,32 @@
-package de.audioattack.yacy31c3search.activities;
+package de.audioattack.yacy31c3search.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchIntentService;
+import de.audioattack.yacy31c3search.service.SearchItem;
 import de.audioattack.yacy31c3search.service.SearchListener;
-import de.audioattack.yacy31c3search.service.data.SearchItem;
 
 
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private ActionBar actionBar;
-
-    private ListView lv;
-    private ArrayAdapter<SearchItem> arrayAdapter;
+    private RecyclerView lv;
 
     private boolean openKeyboard;
+    private LinearLayoutManager mLayoutManager;
+    private MyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,34 +35,18 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         SearchIntentService.addSearchListener(this);
 
-        actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
+        lv = (RecyclerView) findViewById(R.id.recyclerView);
+        lv.setHasFixedSize(true);
+        lv.setItemAnimator(new DefaultItemAnimator());
 
-        lv = (ListView) findViewById(R.id.listView);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        lv.setLayoutManager(mLayoutManager);
 
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View view, int pos,
-                                    long arg3) {
-                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-                        .parse(SearchIntentService.searchResult.get(pos).getLink().toString()));
-                try {
-                    startActivity(browserIntent);
-                } catch (Exception ex) {
-                    Toast.makeText(MainActivity.this.getApplicationContext(),
-                            ex.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        lv.setEmptyView(findViewById(R.id.emptyElement));
-
-        arrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, new ArrayList<>(SearchIntentService.searchResult));
-
-        lv.setAdapter(arrayAdapter);
-
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(SearchIntentService.searchResult);
+        lv.setAdapter(mAdapter);
 
         handleIntent(getIntent());
     }
@@ -142,7 +118,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private void doMySearch(String query) {
 
         if (query != null) {
-            arrayAdapter.clear();
+            SearchIntentService.searchResult.clear();
+            mAdapter.notifyDataSetChanged();
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
             startService(intent);
@@ -179,13 +156,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
     @Override
     public void onOldResultCleared() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                arrayAdapter.clear();
-
-            }
-        });
+        // nothing to do here?
     }
 
     @Override
@@ -193,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                arrayAdapter.add(item);
+                mAdapter.notifyItemInserted(SearchIntentService.searchResult.lastIndexOf(item));
             }
         });
 

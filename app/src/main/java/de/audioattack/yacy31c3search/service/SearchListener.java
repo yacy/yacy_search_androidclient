@@ -1,7 +1,5 @@
 package de.audioattack.yacy31c3search.service;
 
-import de.audioattack.yacy31c3search.service.data.SearchItem;
-
 /**
  * Created by low012 on 20.12.14.
  */

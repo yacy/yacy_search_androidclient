@@ -1,4 +1,4 @@
-package de.audioattack.yacy31c3search.service.data;
+package de.audioattack.yacy31c3search.service;
 
 import java.net.URL;
 

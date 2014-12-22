@@ -1,4 +1,4 @@
-package de.audioattack.yacy31c3search.service.xml;
+package de.audioattack.yacy31c3search.service;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -14,17 +14,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import de.audioattack.yacy31c3search.service.SearchListener;
-import de.audioattack.yacy31c3search.service.data.SearchItem;
 
+public class XmlSearchResultParser extends DefaultHandler implements ISearchResultParser {
 
-public class SearchResultParser extends DefaultHandler {
+    private static final String PARAMS = "yacysearch.rss?query=%s&contentdom=text&verify=ifExists&maximumRecords=1000";
 
     public static final String ITEM = "item";
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";
     public static final String LINK = "link";
-    private final SAXParserFactory factory;
+
     private final SAXParser saxParser;
     private final List<SearchItem> list;
 
@@ -35,21 +34,31 @@ public class SearchResultParser extends DefaultHandler {
 
     private String title;
     private URL link;
-    private String description;
+    private StringBuilder description = new StringBuilder();
 
     private final SearchListener searchListener;
 
-    public SearchResultParser(final List<SearchItem> results, final SearchListener searchListener)
+    public XmlSearchResultParser(final List<SearchItem> results, final SearchListener searchListener)
             throws ParserConfigurationException, SAXException {
-        factory = SAXParserFactory.newInstance();
-        saxParser = factory.newSAXParser();
+
+        saxParser = SAXParserFactory.newInstance().newSAXParser();
         list = results;
         this.searchListener = searchListener;
     }
 
-    public final void parse(final InputStream input)
-            throws SAXException, IOException {
-        saxParser.parse(input, this);
+    @Override
+    public final String getSearchUrlParameter() {
+        return PARAMS;
+    }
+
+    @Override
+    public final void parse(final InputStream input) {
+        try {
+            saxParser.parse(input, this);
+        } catch (SAXException | IOException e) {
+
+            this.searchListener.onError(e);
+        }
     }
 
     @Override
@@ -72,7 +81,9 @@ public class SearchResultParser extends DefaultHandler {
                 isItem = true;
                 title = null;
                 link = null;
-                description = null;
+                if (description.length() > 0) {
+                    description.delete(0, description.length());
+                }
                 break;
             case TITLE:
                 isTitle = true;
@@ -97,7 +108,7 @@ public class SearchResultParser extends DefaultHandler {
         switch (localName) {
             case ITEM:
                 if (title != null && link != null) {
-                    final SearchItem item = new SearchItem(link, title, description);
+                    final SearchItem item = new SearchItem(link, title, description.toString());
                     list.add(item);
                     searchListener.onItemAdded(item);
                 }
@@ -126,7 +137,7 @@ public class SearchResultParser extends DefaultHandler {
         if (isItem && isTitle) {
             title = new String(ch, start, length);
         } else if (isItem && isDescription) {
-            description = new String(ch, start, length);
+            description.append(ch, start, length);
         } else if (isItem && isLink) {
             try {
                 link = new URL(new String(ch, start, length));
