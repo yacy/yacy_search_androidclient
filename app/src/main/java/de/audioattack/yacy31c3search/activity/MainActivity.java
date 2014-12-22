@@ -22,14 +22,9 @@ import de.audioattack.yacy31c3search.service.SearchListener;
 
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
     private MyAdapter adapter;
 
     private android.support.v7.widget.SearchView searchView;
-
-    private boolean openKeyboard;
-    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +36,15 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         SearchIntentService.addSearchListener(this);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
         adapter = new MyAdapter(SearchIntentService.searchResult);
         recyclerView.setAdapter(adapter);
 
-        RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        recyclerView.addItemDecoration(itemDecoration);
-
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
         final View button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +97,10 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     }
 
     private void handleIntent(Intent intent) {
+
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             doMySearch(query);
-        } else {
-            openKeyboard = true;
         }
     }
 
