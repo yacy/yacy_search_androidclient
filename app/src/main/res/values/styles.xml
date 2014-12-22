@@ -10,9 +10,9 @@
     </style>
 
     <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="textColorPrimary">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
         <item name="actionMenuTextColor">@color/abc_primary_text_material_dark</item>
-        <item name="textColorSecondary">@color/abc_secondary_text_material_dark</item>
+        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
         <item name="background">@color/yacy_blue</item>
     </style>
 

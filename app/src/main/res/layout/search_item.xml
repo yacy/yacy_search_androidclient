@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
-    android:paddingTop="4dp">
+    android:layout_marginBottom="8dp">
 
-    <TextView
+<TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,11 +34,5 @@
         android:ellipsize="end"
         android:singleLine="false"
         android:textSize="@dimen/abc_text_size_small_material" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/primary_dark_material_light" />
 
 </LinearLayout>

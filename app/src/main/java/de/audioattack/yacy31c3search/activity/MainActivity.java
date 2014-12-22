@@ -23,11 +23,11 @@ import de.audioattack.yacy31c3search.service.SearchListener;
 
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
-    private RecyclerView lv;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private MyAdapter adapter;
 
     private boolean openKeyboard;
-    private LinearLayoutManager mLayoutManager;
-    private MyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +39,22 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         SearchIntentService.addSearchListener(this);
 
-        lv = (RecyclerView) findViewById(R.id.recyclerView);
-        lv.setHasFixedSize(true);
-        lv.setItemAnimator(new DefaultItemAnimator());
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        lv.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(SearchIntentService.searchResult);
-        lv.setAdapter(mAdapter);
+        adapter = new MyAdapter(SearchIntentService.searchResult);
+        recyclerView.setAdapter(adapter);
+
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        recyclerView.addItemDecoration(itemDecoration);
 
         handleIntent(getIntent());
     }
@@ -123,7 +127,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         if (query != null) {
             SearchIntentService.searchResult.clear();
-            mAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
             startService(intent);
@@ -168,7 +172,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAdapter.notifyItemInserted(SearchIntentService.searchResult.lastIndexOf(item));
+                adapter.notifyItemInserted(SearchIntentService.searchResult.lastIndexOf(item));
             }
         });
 
