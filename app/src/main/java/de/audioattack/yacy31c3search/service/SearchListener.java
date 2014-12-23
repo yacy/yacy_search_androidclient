@@ -13,7 +13,7 @@ public interface SearchListener {
 
     void onNetworkUnavailable();
 
-    void onOldResultCleared();
+    void onOldResultCleared(int numberOfResults);
 
     void onItemAdded(SearchItem item);
 }

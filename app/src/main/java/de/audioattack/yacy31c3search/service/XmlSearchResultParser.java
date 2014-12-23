@@ -63,9 +63,8 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
 
     @Override
     public final void startDocument() throws SAXException {
-        list.clear();
 
-        searchListener.onOldResultCleared();
+        SearchIntentService.clearList();
     }
 
     @Override

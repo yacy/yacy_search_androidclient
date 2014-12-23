@@ -2,7 +2,10 @@ package de.audioattack.yacy31c3search.service;
 
 import android.app.IntentService;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import org.xml.sax.SAXException;
 
@@ -41,7 +44,7 @@ public class SearchIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(final Intent intent) {
 
         String searchString = intent.getStringExtra(SearchManager.QUERY);
         lastSearch = searchString;
@@ -55,6 +58,17 @@ public class SearchIntentService extends IntentService {
 
             search(searchString);
         }
+    }
+
+    public static void clearList() {
+
+        final int numberOfItems = SEARCH_RESULT.size();
+
+        if (numberOfItems > 0) {
+            SEARCH_RESULT.clear();
+        }
+
+        searchListener.onOldResultCleared(numberOfItems);
     }
 
     private void search(String searchString) {
@@ -78,6 +92,15 @@ public class SearchIntentService extends IntentService {
 
             } catch (MalformedURLException e) {
                 searchListener.onError(e);
+                return;
+            }
+
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnected()) {
+
+                searchListener.onNetworkUnavailable();
                 return;
             }
 

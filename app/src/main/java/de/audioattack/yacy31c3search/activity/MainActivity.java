@@ -134,8 +134,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private void doMySearch(String query) {
 
         if (query != null) {
-            SearchIntentService.SEARCH_RESULT.clear();
-            adapter.notifyDataSetChanged();
+            SearchIntentService.clearList();
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
             startService(intent);
@@ -168,11 +167,18 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onNetworkUnavailable() {
 
+        AlertDialog.newInstance(R.string.no_network_title, R.string.no_network_message).show(getSupportFragmentManager(), "no_network");
     }
 
     @Override
-    public void onOldResultCleared() {
-        // nothing to do here?
+    public void onOldResultCleared(final int numberOfResults) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyItemRangeRemoved(0, numberOfResults);
+            }
+        });
     }
 
     @Override
