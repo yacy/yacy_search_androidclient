@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new MyAdapter(SearchIntentService.searchResult);
+        adapter = new MyAdapter(SearchIntentService.SEARCH_RESULT);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
@@ -107,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private void doMySearch(String query) {
 
         if (query != null) {
-            SearchIntentService.searchResult.clear();
+            SearchIntentService.SEARCH_RESULT.clear();
             adapter.notifyDataSetChanged();
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
@@ -120,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     public void onBackPressed() {
         super.onBackPressed();
 
-        SearchIntentService.searchResult.clear();
+        SearchIntentService.SEARCH_RESULT.clear();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.notifyItemInserted(SearchIntentService.searchResult.lastIndexOf(item));
+                adapter.notifyItemInserted(SearchIntentService.SEARCH_RESULT.lastIndexOf(item));
             }
         });
 

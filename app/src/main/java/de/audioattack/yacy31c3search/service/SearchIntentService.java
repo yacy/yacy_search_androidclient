@@ -25,7 +25,7 @@ public class SearchIntentService extends IntentService {
 
     public static String lastSearch;
 
-    public static List<SearchItem> searchResult = new ArrayList<>();
+    public static final List<SearchItem> SEARCH_RESULT = new ArrayList<>();
 
     private static SearchListener searchListener;
 
@@ -55,8 +55,6 @@ public class SearchIntentService extends IntentService {
 
             search(searchString);
         }
-
-
     }
 
     private void search(String searchString) {
@@ -65,15 +63,15 @@ public class SearchIntentService extends IntentService {
 
             searchListener.onLoadingData();
 
-            XmlSearchResultParser parser = null;
+            XmlSearchResultParser parser;
             try {
-                parser = new XmlSearchResultParser(searchResult, searchListener);
+                parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
             } catch (ParserConfigurationException | SAXException e) {
                 searchListener.onError(e);
                 return;
             }
 
-            URL peer = null;
+            URL peer;
             try {
                 peer = new URL(
                         "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
@@ -83,29 +81,27 @@ public class SearchIntentService extends IntentService {
                 return;
             }
 
-            if (peer != null) {
-                Object o = null;
+            Object o;
+            try {
+                o = peer.getContent();
+            } catch (IOException e) {
+                searchListener.onError(e);
+                return;
+            }
+
+            if (o instanceof InputStream) {
+
                 try {
-                    o = peer.getContent();
-                } catch (IOException e) {
+
+                    final InputStream is = (InputStream) o;
+                    parser.parse(is);
+                } catch (Exception e) {
                     searchListener.onError(e);
                     return;
                 }
-
-                if (o instanceof InputStream) {
-
-                    try {
-
-                        final InputStream is = (InputStream) o;
-                        parser.parse(is);
-                    } catch (Exception e) {
-                        searchListener.onError(e);
-                        return;
-                    }
-                }
-
-                searchListener.onFinishedData();
             }
+
+            searchListener.onFinishedData();
 
         }
 
