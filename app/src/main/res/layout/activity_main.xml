@@ -15,6 +15,16 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ActionBar" />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/toolbar"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
+        android:visibility="invisible" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
