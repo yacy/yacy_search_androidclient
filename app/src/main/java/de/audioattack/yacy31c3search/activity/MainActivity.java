@@ -22,9 +22,13 @@ import de.audioattack.yacy31c3search.service.SearchListener;
 
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
+    public static final String QUERY = "QUERY";
+    public static final String ICONIFIED = "ICONIFIED";
     private MyAdapter adapter;
 
     private android.support.v7.widget.SearchView searchView;
+    private boolean iconified;
+    private CharSequence query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,26 +66,46 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.search);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final MenuItem searchItem = menu.findItem(R.id.search);
 
         searchView =
                 (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
 
+        final SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        if (query != null) {
+            searchView.setQuery(query, false);
+        }
+
+        searchView.setIconified(iconified);
 
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(ICONIFIED, searchView.isIconified());
+        outState.putCharSequence(QUERY, searchView.getQuery());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        iconified = savedInstanceState.getBoolean(ICONIFIED);
+        query = savedInstanceState.getCharSequence(QUERY);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
