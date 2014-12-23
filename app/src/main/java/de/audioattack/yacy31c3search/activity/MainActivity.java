@@ -162,6 +162,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onError(Exception ex) {
 
+        AlertDialog.newInstance(R.string.exception_title, R.string.exception_message, ex).show(getSupportFragmentManager(), "no_network");
+
     }
 
     @Override
