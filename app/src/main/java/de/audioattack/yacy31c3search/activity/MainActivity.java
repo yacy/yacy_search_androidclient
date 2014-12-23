@@ -200,10 +200,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
                 if (adapter.getItemCount() == 0) {
                     noResults.setVisibility(View.VISIBLE);
-                } else {
-                    adapter.notifyItemRangeInserted(0, adapter.getItemCount());
                 }
-
             }
         });
     }
