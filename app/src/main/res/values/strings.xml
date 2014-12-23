@@ -7,5 +7,15 @@
     <string name="action_about">About</string>
     <string name="search_title">YaCy search for 31c3</string>
     <string name="search_hint">Search with YaCy</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="about_title">About</string>
+    <string name="about_message"><![CDATA[Powered by <a href=\"http://yacy.net/\">YaCy</a>.<br /><br />Copyright &#169; 2014 <a href="http://low.audioattack.de/">Marc Nause</a><br /><br />This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU General Public License as published by
+		the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version.<br /><br />This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+		GNU General Public License for more details.<br /><br />You should have received a copy of the GNU General Public License
+		along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.]]></string>
 
 </resources>

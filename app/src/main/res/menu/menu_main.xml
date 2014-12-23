@@ -11,11 +11,11 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
 
-    <item
+    <!-- item
         android:id="@+id/action_settings"
         android:orderInCategory="99"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never" / -->
 
     <item
         android:id="@+id/action_about"

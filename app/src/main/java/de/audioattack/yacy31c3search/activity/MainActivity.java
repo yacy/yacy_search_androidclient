@@ -106,7 +106,10 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+
+            AlertDialog.newInstance(R.string.about_title, R.string.about_message).show(getSupportFragmentManager(), "about");
+
             return true;
         }
 
