@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.audioattack.yacy31c3search"
     android:versionCode="1"
+    android:installLocation="auto"
     android:versionName="0.1">
 
     <uses-sdk

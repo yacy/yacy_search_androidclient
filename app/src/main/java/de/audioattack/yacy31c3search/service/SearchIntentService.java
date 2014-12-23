@@ -3,7 +3,6 @@ package de.audioattack.yacy31c3search.service;
 import android.app.IntentService;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.util.Log;
 
 import org.xml.sax.SAXException;
 
@@ -64,13 +63,14 @@ public class SearchIntentService extends IntentService {
 
         if (searchString.length() > 0) {
 
-            Log.d(TAG, "Requesting data for " + searchString);
+            searchListener.onLoadingData();
 
             XmlSearchResultParser parser = null;
             try {
                 parser = new XmlSearchResultParser(searchResult, searchListener);
             } catch (ParserConfigurationException | SAXException e) {
-                e.printStackTrace();
+                searchListener.onError(e);
+                return;
             }
 
             URL peer = null;
@@ -79,7 +79,8 @@ public class SearchIntentService extends IntentService {
                         "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
 
             } catch (MalformedURLException e) {
-                Log.e(TAG, "", e);
+                searchListener.onError(e);
+                return;
             }
 
             if (peer != null) {
@@ -87,10 +88,9 @@ public class SearchIntentService extends IntentService {
                 try {
                     o = peer.getContent();
                 } catch (IOException e) {
-                    Log.e(TAG, "", e);
+                    searchListener.onError(e);
+                    return;
                 }
-
-                Log.wtf(TAG, "starting parser");
 
                 if (o instanceof InputStream) {
 
@@ -99,12 +99,12 @@ public class SearchIntentService extends IntentService {
                         final InputStream is = (InputStream) o;
                         parser.parse(is);
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        searchListener.onError(e);
+                        return;
                     }
                 }
 
-                Log.wtf(TAG, "finished parser");
+                searchListener.onFinishedData();
             }
 
         }
