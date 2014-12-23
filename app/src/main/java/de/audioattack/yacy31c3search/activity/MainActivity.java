@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchIntentService;
@@ -29,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private android.support.v7.widget.SearchView searchView;
     private boolean iconified;
     private CharSequence query;
+
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
                 searchView.setIconified(false);
             }
         });
+
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);
 
         handleIntent(getIntent());
     }
@@ -152,11 +157,23 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onLoadingData() {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
     public void onFinishedData() {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
