@@ -31,6 +31,7 @@ public class SearchIntentService extends IntentService {
     public static final List<SearchItem> SEARCH_RESULT = new ArrayList<>();
 
     private static SearchListener searchListener;
+    public static boolean isLoading;
 
     /**
      * Creates an IntentService.
@@ -76,12 +77,14 @@ public class SearchIntentService extends IntentService {
         if (searchString.length() > 0) {
 
             searchListener.onLoadingData();
+            isLoading = true;
 
             XmlSearchResultParser parser;
             try {
                 parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
             } catch (ParserConfigurationException | SAXException e) {
                 searchListener.onError(e);
+                isLoading = false;
                 return;
             }
 
@@ -92,6 +95,7 @@ public class SearchIntentService extends IntentService {
 
             } catch (MalformedURLException e) {
                 searchListener.onError(e);
+                isLoading = false;
                 return;
             }
 
@@ -101,6 +105,7 @@ public class SearchIntentService extends IntentService {
             if (networkInfo == null || !networkInfo.isConnected()) {
 
                 searchListener.onNetworkUnavailable();
+                isLoading = false;
                 return;
             }
 
@@ -109,6 +114,7 @@ public class SearchIntentService extends IntentService {
                 o = peer.getContent();
             } catch (IOException e) {
                 searchListener.onError(e);
+                isLoading = false;
                 return;
             }
 
@@ -120,12 +126,13 @@ public class SearchIntentService extends IntentService {
                     parser.parse(is);
                 } catch (Exception e) {
                     searchListener.onError(e);
+                    isLoading = false;
                     return;
                 }
             }
 
             searchListener.onFinishedData();
-
+            isLoading = false;
         }
 
     }

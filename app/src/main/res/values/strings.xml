@@ -20,6 +20,8 @@
     <string name="no_network_title">No network!</string>
     <string name="no_network_message">The app is unable to connect to the backend. Please make sure that your connection is up and running!</string>
     <string name="exception_title">Ooops!</string>
-    <string name="exception_message">A problem occured: %s</string>
+    <string name="exception_message">A problem occurred: %s</string>
+    <string name="text_no_results">Sorry, no search results found. :-(</string>
+    <string name="text_empty">Welcome to 31c3 Search!</string>
 
 </resources>

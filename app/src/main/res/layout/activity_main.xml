@@ -23,7 +23,7 @@
         android:layout_below="@+id/toolbar"
         android:indeterminate="true"
         android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -33,6 +33,32 @@
         android:fadingEdge="horizontal"
         android:requiresFadingEdge="horizontal"
         android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/tv_no_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/text_no_results"
+        android:textColor="@color/yacy_blue"
+        android:textSize="@dimen/abc_text_size_headline_material"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressbar"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/text_empty"
+        android:textColor="@color/yacy_blue"
+        android:textSize="@dimen/abc_text_size_headline_material" />
 
     <include layout="@layout/include_fab" />
 

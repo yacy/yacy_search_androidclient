@@ -32,16 +32,16 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private CharSequence query;
 
     private ProgressBar progressBar;
+    private View emptyView;
+    private View noResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        SearchIntentService.addSearchListener(this);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -50,8 +50,9 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         adapter = new MyAdapter(SearchIntentService.SEARCH_RESULT);
         recyclerView.setAdapter(adapter);
-
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        SearchIntentService.addSearchListener(this);
 
         final View button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +63,21 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         });
 
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        emptyView = findViewById(R.id.tv_empty);
+        noResults = findViewById(R.id.tv_no_results);
+
+        if (SearchIntentService.isLoading) {
+
+            emptyView.setVisibility(View.GONE);
+            noResults.setVisibility(View.GONE);
+
+        } else if (SearchIntentService.lastSearch != null) {
+            emptyView.setVisibility(View.GONE);
+
+            if (SearchIntentService.SEARCH_RESULT.isEmpty()) {
+                noResults.setVisibility(View.VISIBLE);
+            }
+        }
 
         handleIntent(getIntent());
     }
@@ -85,7 +101,13 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
             searchView.setQuery(query, false);
         }
 
-        searchView.setIconified(iconified);
+        if (SearchIntentService.SEARCH_RESULT.isEmpty() && SearchIntentService.lastSearch == null) {
+            searchView.setIconified(iconified);
+        }
+
+        if (SearchIntentService.isLoading) {
+            onLoadingData();
+        }
 
         return true;
     }
@@ -140,6 +162,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
         if (query != null) {
             SearchIntentService.clearList();
+            emptyView.setVisibility(View.GONE);
+            noResults.setVisibility(View.GONE);
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
             startService(intent);
@@ -152,6 +176,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         super.onBackPressed();
 
         SearchIntentService.SEARCH_RESULT.clear();
+        SearchIntentService.lastSearch = null;
     }
 
     @Override
@@ -172,6 +197,13 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
             @Override
             public void run() {
                 progressBar.setVisibility(View.INVISIBLE);
+
+                if (adapter.getItemCount() == 0) {
+                    noResults.setVisibility(View.VISIBLE);
+                } else {
+                    adapter.notifyItemRangeInserted(0, adapter.getItemCount());
+                }
+
             }
         });
     }
@@ -180,7 +212,6 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     public void onError(Exception ex) {
 
         AlertDialog.newInstance(R.string.exception_title, R.string.exception_message, ex).show(getSupportFragmentManager(), "no_network");
-
     }
 
     @Override
@@ -202,12 +233,12 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
     @Override
     public void onItemAdded(final SearchItem item) {
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyItemInserted(SearchIntentService.SEARCH_RESULT.lastIndexOf(item));
             }
         });
-
     }
 }
