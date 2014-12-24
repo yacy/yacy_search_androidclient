@@ -10,5 +10,5 @@
     android:layout_marginRight="16dp"
     android:background="@drawable/fab"
     android:elevation="8dp"
-    android:src="@android:drawable/ic_menu_search"
+    android:src="@drawable/lb_ic_in_app_search"
     android:stateListAnimator="@anim/fab_anim" />
