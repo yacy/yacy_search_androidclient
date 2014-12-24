@@ -45,6 +45,7 @@
         android:text="@string/text_no_results"
         android:textColor="@color/yacy_blue"
         android:textSize="@dimen/abc_text_size_headline_material"
+        android:textStyle="bold"
         android:visibility="gone" />
 
 
@@ -58,7 +59,8 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/text_empty"
         android:textColor="@color/yacy_blue"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_headline_material"
+        android:textStyle="bold" />
 
     <include layout="@layout/include_fab" />
 
