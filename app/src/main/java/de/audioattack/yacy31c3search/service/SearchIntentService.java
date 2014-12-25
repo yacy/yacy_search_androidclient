@@ -7,17 +7,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -94,17 +87,20 @@ public class SearchIntentService extends IntentService {
 
                     final XmlSearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
 
-                    final String url =
-                            "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString);
+                    final URL url = new URL("http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
+                    final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setReadTimeout(10000 /* milliseconds */);
+                    conn.setConnectTimeout(15000 /* milliseconds */);
+                    conn.setRequestMethod("GET");
+                    conn.setDoInput(true);
 
-                    final HttpClient httpClient = new DefaultHttpClient();
-                    final HttpParams httpParameters = httpClient.getParams();
-                    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
-                    final HttpContext localContext = new BasicHttpContext();
+                    conn.connect();
 
-                    final HttpGet httpGet = new HttpGet(url);
-                    HttpResponse response = httpClient.execute(httpGet, localContext);
-                    is = response.getEntity().getContent();
+                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        is = conn.getInputStream();
+                    } else {
+                        throw new IOException("Server returned HTTP code " + conn.getResponseCode() + ".");
+                    }
 
                     parser.parse(is);
 
