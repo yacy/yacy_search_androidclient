@@ -17,9 +17,10 @@
 		GNU General Public License for more details.<br /><br />You should have received a copy of the GNU General Public License
 		along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.<br /><br />Source code of the app: <a href="https://gitorious.org/31c3-search/">https://gitorious.org/31c3-search</a>]]></string>
     <string name="no_network_title">Kein Netzwerk!</string>
-    <string name="no_network_message">Die App kann sich nicht mit dem Suchserver verbinden. Bitte überprüfe die Netzwerkeinstellungen</string>
+    <string name="no_network_message">Die App kann sich nicht mit dem Suchserver verbinden. Bitte überprüfe die Netzwerkeinstellungen.</string>
     <string name="exception_title">Ooops!</string>
     <string name="exception_message">Ein Problem ist aufgetreten: %s</string>
+    <string name="activity_not_found">Auf diesem Gerät ist keine App installiert, die %s-Links unterstützt.</string>
     <string name="text_no_results">Schade, keine Ergebnisse gefunden. :-(</string>
     <string name="text_empty">Willkommen zur 31c3 Congress-Suche!</string>
 

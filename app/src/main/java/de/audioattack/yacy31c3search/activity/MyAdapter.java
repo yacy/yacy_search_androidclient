@@ -1,5 +1,7 @@
 package de.audioattack.yacy31c3search.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchItem;
@@ -19,13 +22,10 @@ import de.audioattack.yacy31c3search.service.SearchItem;
  * Created by low012 on 22.12.14.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private List<SearchItem> mDataset;
+    private final List<SearchItem> mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public final TextView title;
         public final TextView url;
         public final TextView description;
@@ -42,13 +42,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                                      @Override
                                      public void onClick(View v) {
 
-                                         final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-                                                 .parse(getUriString()));
+                                         final Uri uri = Uri.parse(getUriString());
+                                         final Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
                                          try {
                                              v.getContext().startActivity(browserIntent);
+                                         } catch (ActivityNotFoundException ex) {
+
+                                             final Context context = v.getContext();
+                                             Toast.makeText(context,
+                                                     String.format(Locale.US, context.getString(R.string.activity_not_found), uri.getScheme()),
+                                                     Toast.LENGTH_LONG).show();
+
                                          } catch (Exception ex) {
-                                             Toast.makeText(v.getContext(),
-                                                     ex.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+
+                                             final Context context = v.getContext();
+                                             Toast.makeText(context,
+                                                     String.format(Locale.US, context.getString(R.string.activity_not_found), ex.getLocalizedMessage()),
+                                                     Toast.LENGTH_LONG).show();
                                          }
                                      }
                                  }
@@ -62,25 +72,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     }
 
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<SearchItem> myDataset) {
+    public MyAdapter(final List<SearchItem> myDataset) {
         mDataset = myDataset;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
+    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         final SearchItem item = mDataset.get(position);
 
@@ -90,9 +94,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.description.setText(descr == null ? "-" : Html.fromHtml(descr));
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
     }
+
 }

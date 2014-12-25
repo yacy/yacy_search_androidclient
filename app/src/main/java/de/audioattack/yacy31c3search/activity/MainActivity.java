@@ -208,11 +208,27 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onError(Exception ex) {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
         AlertDialog.newInstance(R.string.exception_title, R.string.exception_message, ex).show(getSupportFragmentManager(), "no_network");
     }
 
     @Override
     public void onNetworkUnavailable() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+
+            }
+        });
 
         AlertDialog.newInstance(R.string.no_network_title, R.string.no_network_message).show(getSupportFragmentManager(), "no_network");
     }

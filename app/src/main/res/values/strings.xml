@@ -17,9 +17,10 @@
 		GNU General Public License for more details.<br /><br />You should have received a copy of the GNU General Public License
 		along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.<br /><br />Source code of the app: <a href="https://gitorious.org/31c3-search/">https://gitorious.org/31c3-search</a>]]></string>
     <string name="no_network_title">No network!</string>
-    <string name="no_network_message">The app is unable to connect to the backend. Please make sure that your connection is up and running!</string>
+    <string name="no_network_message">The app is unable to connect to the backend. Please make sure that your connection is up and running.</string>
     <string name="exception_title">Ooops!</string>
     <string name="exception_message">A problem occurred: %s</string>
+    <string name="activity_not_found">No app installed on this device to handle %s-links.</string>
     <string name="text_no_results">Sorry, no search results found. :-(</string>
     <string name="text_empty">Welcome to 31c3 Congress Search!</string>
 

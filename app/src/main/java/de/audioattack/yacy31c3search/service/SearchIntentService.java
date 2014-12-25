@@ -7,17 +7,11 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by low012 on 20.12.14.
@@ -79,60 +73,38 @@ public class SearchIntentService extends IntentService {
             searchListener.onLoadingData();
             isLoading = true;
 
-            XmlSearchResultParser parser;
             try {
-                parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
-            } catch (ParserConfigurationException | SAXException e) {
-                searchListener.onError(e);
-                isLoading = false;
-                return;
-            }
 
-            URL peer;
-            try {
-                peer = new URL(
+                final XmlSearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
+
+                final URL peer = new URL(
                         "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
 
-            } catch (MalformedURLException e) {
-                searchListener.onError(e);
-                isLoading = false;
-                return;
-            }
+                final ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                final NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo == null || !networkInfo.isConnected()) {
 
-            ConnectivityManager connMgr = (ConnectivityManager)
-                    getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if (networkInfo == null || !networkInfo.isConnected()) {
-
-                searchListener.onNetworkUnavailable();
-                isLoading = false;
-                return;
-            }
-
-            Object o;
-            try {
-                o = peer.getContent();
-            } catch (IOException e) {
-                searchListener.onError(e);
-                isLoading = false;
-                return;
-            }
-
-            if (o instanceof InputStream) {
-
-                try {
-
-                    final InputStream is = (InputStream) o;
-                    parser.parse(is);
-                } catch (Exception e) {
-                    searchListener.onError(e);
+                    searchListener.onNetworkUnavailable();
                     isLoading = false;
                     return;
                 }
-            }
 
-            searchListener.onFinishedData();
-            isLoading = false;
+                final Object o = peer.getContent();
+                if (o instanceof InputStream) {
+
+                    final InputStream is = (InputStream) o;
+                    parser.parse(is);
+                }
+
+                searchListener.onFinishedData();
+                isLoading = false;
+
+            } catch (Exception e) {
+
+                searchListener.onError(e);
+                isLoading = false;
+            }
         }
 
     }
