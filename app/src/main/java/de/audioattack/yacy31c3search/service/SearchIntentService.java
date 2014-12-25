@@ -16,6 +16,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +79,10 @@ public class SearchIntentService extends IntentService {
 
         if (searchString.length() > 0) {
 
-            searchListener.onLoadingData();
             isLoading = true;
+            searchListener.onLoadingData();
+
+            InputStream is = null;
 
             try {
 
@@ -101,7 +104,7 @@ public class SearchIntentService extends IntentService {
 
                     final HttpGet httpGet = new HttpGet(url);
                     HttpResponse response = httpClient.execute(httpGet, localContext);
-                    final InputStream is = response.getEntity().getContent();
+                    is = response.getEntity().getContent();
 
                     parser.parse(is);
 
@@ -118,6 +121,16 @@ public class SearchIntentService extends IntentService {
 
                 searchListener.onError(e);
                 isLoading = false;
+            } finally {
+
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+
+                        // we don't care anymore
+                    }
+                }
             }
 
 
