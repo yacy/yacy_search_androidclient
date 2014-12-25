@@ -7,8 +7,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -75,36 +83,44 @@ public class SearchIntentService extends IntentService {
 
             try {
 
-                final XmlSearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
-
-                final URL peer = new URL(
-                        "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
-
                 final ConnectivityManager connMgr = (ConnectivityManager)
                         getSystemService(Context.CONNECTIVITY_SERVICE);
                 final NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                if (networkInfo == null || !networkInfo.isConnected()) {
+                if (networkInfo != null && networkInfo.isConnected()) {
+
+
+                    final XmlSearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
+
+                    final String url =
+                            "http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString);
+
+                    final HttpClient httpClient = new DefaultHttpClient();
+                    final HttpParams httpParameters = httpClient.getParams();
+                    HttpConnectionParams.setTcpNoDelay(httpParameters, true);
+                    final HttpContext localContext = new BasicHttpContext();
+
+                    final HttpGet httpGet = new HttpGet(url);
+                    HttpResponse response = httpClient.execute(httpGet, localContext);
+                    final InputStream is = response.getEntity().getContent();
+
+                    parser.parse(is);
+
+                    searchListener.onFinishedData();
+                    isLoading = false;
+
+                } else {
 
                     searchListener.onNetworkUnavailable();
                     isLoading = false;
-                    return;
                 }
-
-                final Object o = peer.getContent();
-                if (o instanceof InputStream) {
-
-                    final InputStream is = (InputStream) o;
-                    parser.parse(is);
-                }
-
-                searchListener.onFinishedData();
-                isLoading = false;
 
             } catch (Exception e) {
 
                 searchListener.onError(e);
                 isLoading = false;
             }
+
+
         }
 
     }
