@@ -31,7 +31,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public final TextView description;
         public final View v;
 
-        public ViewHolder(View v) {
+        public ViewHolder(final View v) {
             super(v);
             this.v = v;
             title = (TextView) v.findViewById(R.id.tv_title);
@@ -77,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
         final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
         return new ViewHolder(v);
@@ -89,7 +89,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         final SearchItem item = mDataset.get(position);
 
         holder.title.setText(item.getTitle());
-        holder.url.setText(item.getLink().toExternalForm());
+        holder.url.setText(item.getLink());
         final String descr = item.getDescription();
         holder.description.setText(descr == null ? "-" : Html.fromHtml(descr));
     }

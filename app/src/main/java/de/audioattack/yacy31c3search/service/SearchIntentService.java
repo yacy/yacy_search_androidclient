@@ -74,7 +74,7 @@ public class SearchIntentService extends IntentService {
         searchListener.onOldResultCleared(numberOfItems);
     }
 
-    private void search(String searchString) {
+    private void search(final String searchString) {
 
         if (searchString.length() > 0) {
 

@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private View noResults;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -145,12 +145,12 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(final Intent intent) {
 
         handleIntent(intent);
     }
 
-    private void handleIntent(Intent intent) {
+    private void handleIntent(final Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -158,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         }
     }
 
-    private void doMySearch(String query) {
+    private void doMySearch(final String query) {
 
         if (query != null) {
             SearchIntentService.clearList();
@@ -206,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     }
 
     @Override
-    public void onError(Exception ex) {
+    public void onError(final Exception ex) {
 
         runOnUiThread(new Runnable() {
             @Override

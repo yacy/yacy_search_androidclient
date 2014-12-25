@@ -1,7 +1,5 @@
 package de.audioattack.yacy31c3search.service;
 
-import java.net.URL;
-
 public class SearchItem {
 
     // <item>
@@ -24,16 +22,16 @@ public class SearchItem {
     // </item>
 
     private String title;
-    private URL link;
+    private String link;
     private String description;
 
-    public SearchItem(final URL link, final String title, final String description) {
+    public SearchItem(final String link, final String title, final String description) {
         this.link = link;
         this.title = title;
         this.description = description;
     }
 
-    public URL getLink() {
+    public String getLink() {
         return link;
     }
 

@@ -6,8 +6,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,7 +31,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
     boolean isDescription = false;
 
     private String title;
-    private URL link;
+    private String link;
     private StringBuilder description = new StringBuilder();
 
     private final SearchListener searchListener;
@@ -132,11 +130,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
         } else if (isItem && isDescription) {
             description.append(ch, start, length);
         } else if (isItem && isLink) {
-            try {
-                link = new URL(new String(ch, start, length));
-            } catch (MalformedURLException e) {
-                link = null;
-            }
+            link = new String(ch, start, length);
         }
     }
 
