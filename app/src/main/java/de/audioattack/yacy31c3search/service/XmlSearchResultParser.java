@@ -30,8 +30,8 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
     boolean isTitle = false;
     boolean isDescription = false;
 
-    private String title;
-    private String link;
+    private StringBuilder title = new StringBuilder();
+    private StringBuilder link = new StringBuilder();
     private StringBuilder description = new StringBuilder();
 
     private final SearchListener searchListener;
@@ -70,11 +70,10 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
         switch (localName) {
             case ITEM:
                 isItem = true;
-                title = null;
-                link = null;
-                if (description.length() > 0) {
-                    description.delete(0, description.length());
-                }
+                title.delete(0, description.length());
+                link.delete(0, description.length());
+                description.delete(0, description.length());
+
                 break;
             case TITLE:
                 isTitle = true;
@@ -99,7 +98,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
         switch (localName) {
             case ITEM:
                 if (title != null && link != null) {
-                    final SearchItem item = new SearchItem(link, title, description.toString());
+                    final SearchItem item = new SearchItem(link.toString(), title.toString(), description.toString());
                     list.add(item);
                     searchListener.onItemAdded(item);
                 }
@@ -126,11 +125,11 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
             throws SAXException {
 
         if (isItem && isTitle) {
-            title = new String(ch, start, length);
+            title.append(ch, start, length);
         } else if (isItem && isDescription) {
             description.append(ch, start, length);
         } else if (isItem && isLink) {
-            link = new String(ch, start, length);
+            link.append(ch, start, length);
         }
     }
 
