@@ -4,6 +4,7 @@ package de.audioattack.yacy31c3search.activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -14,10 +15,17 @@ import java.util.Locale;
 import de.audioattack.yacy31c3search.R;
 
 /**
- * Created by low012 on 23.12.14.
+ * Displays all kinds of dialogs in the app.
  */
 public class AlertDialog extends DialogFragment {
 
+    /**
+     * Creates dialog for simple messages.
+     *
+     * @param title   ID of title of the message
+     * @param message ID of the message
+     * @return the dialog
+     */
     public static AlertDialog newInstance(final int title, final int message) {
         final AlertDialog frag = new AlertDialog();
         final Bundle args = new Bundle();
@@ -27,6 +35,14 @@ public class AlertDialog extends DialogFragment {
         return frag;
     }
 
+    /**
+     * Creates dialog to display message regarding an exception.
+     *
+     * @param title   ID of title of the message
+     * @param message ID of the message (message should contain %s to be replaced with message from exception)
+     * @param ex      the exception
+     * @return the dialog
+     */
     public static AlertDialog newInstance(final int title, final int message, final Exception ex) {
 
         final AlertDialog frag = new AlertDialog();
@@ -40,7 +56,7 @@ public class AlertDialog extends DialogFragment {
 
 
     @Override
-    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@NonNull final Bundle savedInstanceState) {
         final int title = getArguments().getInt("title");
         final int message = getArguments().getInt("message");
         final String exception = getArguments().getString("exception");

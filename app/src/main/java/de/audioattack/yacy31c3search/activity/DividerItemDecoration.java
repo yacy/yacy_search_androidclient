@@ -41,7 +41,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
 
-    private Drawable mDivider;
+    private final Drawable mDivider;
 
     private int mOrientation;
 

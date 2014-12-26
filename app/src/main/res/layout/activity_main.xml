@@ -30,8 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:fadingEdge="horizontal"
-        android:requiresFadingEdge="horizontal"
+        android:fadingEdge="vertical"
+        android:requiresFadingEdge="vertical"
         android:scrollbars="vertical" />
 
     <TextView
@@ -47,7 +47,6 @@
         android:textSize="@dimen/abc_text_size_headline_material"
         android:textStyle="bold"
         android:visibility="gone" />
-
 
     <TextView
         android:id="@+id/tv_empty"

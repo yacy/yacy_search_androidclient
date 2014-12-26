@@ -17,22 +17,22 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
 
     private static final String PARAMS = "yacysearch.rss?query=%s&contentdom=text&verify=ifExists&maximumRecords=1000";
 
-    public static final String ITEM = "item";
-    public static final String TITLE = "title";
-    public static final String DESCRIPTION = "description";
-    public static final String LINK = "link";
+    private static final String ITEM = "item";
+    private static final String TITLE = "title";
+    private static final String DESCRIPTION = "description";
+    private static final String LINK = "link";
 
     private final SAXParser saxParser;
     private final List<SearchItem> list;
 
-    boolean isItem = false;
-    boolean isLink = false;
-    boolean isTitle = false;
-    boolean isDescription = false;
+    private boolean isItem = false;
+    private boolean isLink = false;
+    private boolean isTitle = false;
+    private boolean isDescription = false;
 
-    private StringBuilder title = new StringBuilder();
-    private StringBuilder link = new StringBuilder();
-    private StringBuilder description = new StringBuilder();
+    private final StringBuilder title = new StringBuilder();
+    private final StringBuilder link = new StringBuilder();
+    private final StringBuilder description = new StringBuilder();
 
     private final SearchListener searchListener;
 

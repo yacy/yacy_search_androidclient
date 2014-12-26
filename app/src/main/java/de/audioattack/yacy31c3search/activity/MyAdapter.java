@@ -19,21 +19,24 @@ import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchItem;
 
 /**
- * Created by low012 on 22.12.14.
+ * Simple adapter for search items.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private final List<SearchItem> mDataset;
+    private final List<SearchItem> searchItems;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView title;
         public final TextView url;
         public final TextView description;
-        public final View v;
 
+        /**
+         * ViewHolder for items.
+         *
+         * @param v view to display data in
+         */
         public ViewHolder(final View v) {
             super(v);
-            this.v = v;
             title = (TextView) v.findViewById(R.id.tv_title);
             url = (TextView) v.findViewById(R.id.tv_url);
             description = (TextView) v.findViewById(R.id.tv_description);
@@ -72,8 +75,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     }
 
-    public MyAdapter(final List<SearchItem> myDataset) {
-        mDataset = myDataset;
+    /**
+     * Constructor.
+     *
+     * @param searchItems contains search results
+     */
+    public MyAdapter(final List<SearchItem> searchItems) {
+        this.searchItems = searchItems;
     }
 
     @Override
@@ -86,7 +94,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        final SearchItem item = mDataset.get(position);
+        final SearchItem item = searchItems.get(position);
 
         holder.title.setText(item.getTitle());
         holder.url.setText(item.getLink());
@@ -96,7 +104,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return searchItems.size();
     }
 
 }

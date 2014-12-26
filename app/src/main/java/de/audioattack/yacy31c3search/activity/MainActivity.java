@@ -25,10 +25,13 @@ import de.audioattack.yacy31c3search.service.SearchIntentService;
 import de.audioattack.yacy31c3search.service.SearchItem;
 import de.audioattack.yacy31c3search.service.SearchListener;
 
+/**
+ * Displays UI of the app.
+ */
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
-    public static final String QUERY = "QUERY";
-    public static final String ICONIFIED = "ICONIFIED";
+    private static final String QUERY = "QUERY";
+    private static final String ICONIFIED = "ICONIFIED";
     private MyAdapter adapter;
 
     private android.support.v7.widget.SearchView searchView;
@@ -342,7 +345,6 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
                 fab.startAnimation(animation);
             }
         }
-
     }
 
 }

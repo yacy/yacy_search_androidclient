@@ -21,9 +21,9 @@ public class SearchItem {
     //
     // </item>
 
-    private String title;
-    private String link;
-    private String description;
+    private final String title;
+    private final String link;
+    private final String description;
 
     public SearchItem(final String link, final String title, final String description) {
         this.link = link;
@@ -41,24 +41,6 @@ public class SearchItem {
 
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder result = new StringBuilder();
-
-        if (title != null) {
-            result.append(title);
-        }
-
-        if (link != null) {
-            if (result.length() > 0) {
-                result.append("\n");
-            }
-            result.append(link.toString());
-        }
-
-        return result.toString();
     }
 
 }
