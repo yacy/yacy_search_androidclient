@@ -70,8 +70,8 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
         switch (localName) {
             case ITEM:
                 isItem = true;
-                title.delete(0, description.length());
-                link.delete(0, description.length());
+                title.delete(0, title.length());
+                link.delete(0, link.length());
                 description.delete(0, description.length());
 
                 break;
