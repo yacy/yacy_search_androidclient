@@ -3,7 +3,10 @@ package de.audioattack.yacy31c3search.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,13 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
 import de.audioattack.yacy31c3search.R;
 import de.audioattack.yacy31c3search.service.SearchIntentService;
 import de.audioattack.yacy31c3search.service.SearchItem;
 import de.audioattack.yacy31c3search.service.SearchListener;
-
 
 public class MainActivity extends ActionBarActivity implements SearchListener {
 
@@ -34,6 +38,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     private ProgressBar progressBar;
     private View emptyView;
     private View noResults;
+    private View fab;
+    private boolean isFabShowing = true;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -52,10 +58,23 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    hideFab();
+                } else if (dy < 0) {
+                    showFab();
+                }
+            }
+        });
+
         SearchIntentService.addSearchListener(this);
 
-        final View button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        fab = findViewById(R.id.button);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchView.setIconified(false);
@@ -121,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     }
 
     @Override
-    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         iconified = savedInstanceState.getBoolean(ICONIFIED);
@@ -254,4 +273,76 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
             }
         });
     }
+
+    private void hideFab() {
+        if (isFabShowing) {
+            isFabShowing = false;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+
+                final Point point = new Point();
+                MainActivity.this.getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+                final float translation = fab.getY() - point.y;
+
+                fab.animate().translationYBy(-translation).start();
+
+            } else {
+
+                final Animation animation = AnimationUtils.makeOutAnimation(getApplication(), true);
+                animation.setFillAfter(true);
+
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(final Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(final Animation animation) {
+                        fab.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(final Animation animation) {
+                    }
+                });
+
+                fab.startAnimation(animation);
+            }
+        }
+    }
+
+    private void showFab() {
+        if (!isFabShowing) {
+            isFabShowing = true;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+
+                fab.animate().translationY(0).start();
+
+            } else {
+
+                final Animation animation = AnimationUtils.makeInAnimation(getApplication(), false);
+                animation.setFillAfter(true);
+
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(final Animation animation) {
+                        fab.setClickable(true);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(final Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(final Animation animation) {
+                    }
+                });
+
+                fab.startAnimation(animation);
+            }
+        }
+
+    }
+
 }
