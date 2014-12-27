@@ -153,16 +153,16 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
 
-        int id = item.getItemId();
-
-        if (id == R.id.action_about) {
-
-            AlertDialog.newInstance(R.string.about_title, R.string.about_message).show(getSupportFragmentManager(), "about");
-
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_about:
+                AlertDialog.newInstance(R.string.action_about, R.string.about_message).show(getSupportFragmentManager(), "about");
+                return true;
+            case R.id.action_settings:
+                SettingsDialog.newInstance().show(getSupportFragmentManager(), "settings");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

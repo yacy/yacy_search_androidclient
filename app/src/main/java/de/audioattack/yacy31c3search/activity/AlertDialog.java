@@ -26,7 +26,7 @@ public class AlertDialog extends DialogFragment {
      * @param message ID of the message
      * @return the dialog
      */
-    public static AlertDialog newInstance(final int title, final int message) {
+    public static DialogFragment newInstance(final int title, final int message) {
         final AlertDialog frag = new AlertDialog();
         final Bundle args = new Bundle();
         args.putInt("title", title);
@@ -43,7 +43,7 @@ public class AlertDialog extends DialogFragment {
      * @param ex      the exception
      * @return the dialog
      */
-    public static AlertDialog newInstance(final int title, final int message, final Exception ex) {
+    public static DialogFragment newInstance(final int title, final int message, final Exception ex) {
 
         final AlertDialog frag = new AlertDialog();
         final Bundle args = new Bundle();
@@ -54,15 +54,14 @@ public class AlertDialog extends DialogFragment {
         return frag;
     }
 
-
     @Override
-    public Dialog onCreateDialog(@NonNull final Bundle savedInstanceState) {
+    @NonNull
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final int title = getArguments().getInt("title");
         final int message = getArguments().getInt("message");
         final String exception = getArguments().getString("exception");
 
         return new android.app.AlertDialog.Builder(getActivity())
-                //.setIcon(R.drawable.alert_dialog_icon)
                 .setTitle(title)
                 .setMessage(exception == null ? Html.fromHtml(getString(message)) : String.format(Locale.US, getString(message), exception))
                 .setPositiveButton(R.string.alert_dialog_ok,

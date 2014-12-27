@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.audioattack.yacy31c3search.activity.SettingsDialog;
+
 /**
  * Created by low012 on 20.12.14.
  */
@@ -87,7 +89,9 @@ public class SearchIntentService extends IntentService {
 
                     final XmlSearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
 
-                    final URL url = new URL("http://31c3.yacy.net/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
+                    final String host = SettingsDialog.load(getApplicationContext(), SettingsDialog.KEY_HOST, SettingsDialog.DEFAULT_HOST);
+
+                    final URL url = new URL("http://" + host + "/" + String.format(Locale.US, parser.getSearchUrlParameter(), searchString));
                     final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(10000 /* milliseconds */);
                     conn.setConnectTimeout(15000 /* milliseconds */);

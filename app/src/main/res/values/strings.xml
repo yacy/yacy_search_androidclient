@@ -7,7 +7,6 @@
     <string name="search_title">YaCy search for 31c3</string>
     <string name="search_hint">Search with YaCy</string>
     <string name="alert_dialog_ok">OK</string>
-    <string name="about_title">About</string>
     <string name="about_message"><![CDATA[Powered by <a href=\"http://yacy.net/\">YaCy</a>.<br /><br />Copyright &#169; 2014 <a href="http://low.audioattack.de/">Marc Nause</a><br /><br />This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
 		the Free Software Foundation, either version 3 of the License, or
@@ -23,5 +22,8 @@
     <string name="activity_not_found">No app installed on this device to handle %s-links.</string>
     <string name="text_no_results">Sorry, no search results found. :-(</string>
     <string name="text_empty">Welcome to 31c3 Congress Search!</string>
+    <string name="settings_host">YaCy server (default: 31c3.yacy.net)</string>
+    <string name="settings_host_hint">host[:port]</string>
+    <string name="alert_dialog_dismiss">Cancel</string>
 
 </resources>
