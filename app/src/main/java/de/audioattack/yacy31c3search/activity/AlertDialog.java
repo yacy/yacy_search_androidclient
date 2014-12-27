@@ -49,7 +49,7 @@ public class AlertDialog extends DialogFragment {
         final Bundle args = new Bundle();
         args.putInt("title", title);
         args.putInt("message", message);
-        args.putString("exception", ex.getMessage());
+        args.putString("exception", ex.getMessage() == null ? ex.toString() : ex.getMessage());
         frag.setArguments(args);
         return frag;
     }
