@@ -40,6 +40,8 @@ public class SettingsDialog extends DialogFragment {
     public static final String KEY_HOST = SettingsDialog.class.getName();
     public static final String DEFAULT_HOST = "31c3.yacy.net";
 
+    private View customView;
+
     public static DialogFragment newInstance() {
         return new SettingsDialog();
     }
@@ -49,16 +51,16 @@ public class SettingsDialog extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
         // using {@link getLayoutInflator(Bundle) here will cause endless recursion
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.settings_dialog, null, false);
+        customView = LayoutInflater.from(getActivity()).inflate(R.layout.settings_dialog, null, false);
 
-        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(getActivity())
+        return new android.app.AlertDialog.Builder(getActivity())
                 .setTitle(R.string.action_settings)
-                .setView(view)
+                .setView(customView)
                 .setPositiveButton(R.string.alert_dialog_ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                final TextView tvSettingsHost = (TextView) view.findViewById(R.id.settings_host);
+                                final TextView tvSettingsHost = (TextView) customView.findViewById(R.id.settings_host);
                                 if (tvSettingsHost != null && tvSettingsHost.getText() != null) {
                                     store(getActivity(), KEY_HOST, (tvSettingsHost.getText().toString()));
                                 }
@@ -72,11 +74,22 @@ public class SettingsDialog extends DialogFragment {
                     }
                 })
                 .create();
+    }
 
-        final TextView tvSettingsHost = (TextView) view.findViewById(R.id.settings_host);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final TextView tvSettingsHost = (TextView) customView.findViewById(R.id.settings_host);
         tvSettingsHost.setText(load(getActivity(), KEY_HOST, DEFAULT_HOST));
 
-        return dialog;
+        // TODO: find a better way to change text color in custom view
+        final Dialog dialog = getDialog();
+        final int textViewId = dialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+        final TextView tv = (TextView) dialog.findViewById(textViewId);
+        if (tv != null) {
+            tvSettingsHost.setTextColor(tv.getCurrentTextColor());
+        }
     }
 
     public static boolean store(final Context context, final String key, final String value) {
