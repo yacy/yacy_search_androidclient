@@ -79,11 +79,11 @@ public class SearchIntentService extends IntentService {
 
         final int numberOfItems = SEARCH_RESULT.size();
 
+        searchListener.onOldResultCleared(numberOfItems);
+
         if (numberOfItems > 0) {
             SEARCH_RESULT.clear();
         }
-
-        searchListener.onOldResultCleared(numberOfItems);
     }
 
     private void search(final String searchString) {
