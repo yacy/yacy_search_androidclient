@@ -47,6 +47,8 @@ public class SearchIntentService extends IntentService {
     private static SearchListener searchListener;
     public static boolean isLoading;
 
+    private static volatile long id = Long.MIN_VALUE;
+
     /**
      * Creates an IntentService.
      */
@@ -71,8 +73,25 @@ public class SearchIntentService extends IntentService {
 
             searchString = searchString.trim().replaceAll("\\s", "+");
 
-            search(searchString);
+
+            search(getNewId(), searchString);
         }
+    }
+
+    private synchronized long getNewId() {
+
+        if (id < Long.MAX_VALUE) {
+            id++;
+        } else {
+            id = Long.MIN_VALUE;
+        }
+
+        return id;
+    }
+
+    static long getCurrentId() {
+
+        return id;
     }
 
     public static void clearList() {
@@ -86,7 +105,7 @@ public class SearchIntentService extends IntentService {
         }
     }
 
-    private void search(final String searchString) {
+    private void search(final long myId, final String searchString) {
 
         if (searchString.length() > 0) {
 
@@ -103,7 +122,7 @@ public class SearchIntentService extends IntentService {
                 if (networkInfo != null && networkInfo.isConnected()) {
 
 
-                    final ISearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener);
+                    final ISearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener, myId);
 
                     final String host = SettingsDialog.load(getApplicationContext(), SettingsDialog.KEY_HOST, SettingsDialog.DEFAULT_HOST);
 
@@ -114,18 +133,24 @@ public class SearchIntentService extends IntentService {
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
 
-                    conn.connect();
+                    if (myId == getCurrentId()) {
 
-                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        is = conn.getInputStream();
-                    } else {
-                        throw new IOException("Server returned HTTP code " + conn.getResponseCode() + ".");
+                        conn.connect();
+
+                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            is = conn.getInputStream();
+                        } else {
+                            throw new IOException("Server returned HTTP code " + conn.getResponseCode() + ".");
+                        }
+
+                        if (myId == getCurrentId()) {
+
+                            parser.parse(is);
+
+                            searchListener.onFinishedData();
+                            isLoading = false;
+                        }
                     }
-
-                    parser.parse(is);
-
-                    searchListener.onFinishedData();
-                    isLoading = false;
 
                 } else {
 
@@ -148,9 +173,11 @@ public class SearchIntentService extends IntentService {
                     }
                 }
             }
-
-
         }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

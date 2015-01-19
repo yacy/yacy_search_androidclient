@@ -190,6 +190,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
             noResults.setVisibility(View.GONE);
             final Intent intent = new Intent(this, SearchIntentService.class);
             intent.putExtra(SearchManager.QUERY, query);
+            stopService(intent);
             startService(intent);
         }
     }

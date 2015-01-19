@@ -56,6 +56,8 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
 
     private final SearchListener searchListener;
 
+    private final long queryId;
+
     /**
      * Constructor.
      *
@@ -64,12 +66,13 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public XmlSearchResultParser(final List<SearchItem> results, final SearchListener searchListener)
+    public XmlSearchResultParser(final List<SearchItem> results, final SearchListener searchListener, final long queryId)
             throws ParserConfigurationException, SAXException {
 
         saxParser = SAXParserFactory.newInstance().newSAXParser();
         list = results;
         this.searchListener = searchListener;
+        this.queryId = queryId;
     }
 
     @Override
@@ -82,11 +85,18 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
     public final void parse(final InputStream input) {
 
         try {
-            saxParser.parse(input, this);
+            if (isFresh()) {
+                saxParser.parse(input, this);
+            }
         } catch (SAXException | IOException e) {
 
             this.searchListener.onError(e);
         }
+    }
+
+    private boolean isFresh() {
+
+        return queryId == SearchIntentService.getCurrentId();
     }
 
     @Override
@@ -96,23 +106,26 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
             final String qName,
             final Attributes attributes) throws SAXException {
 
-        switch (localName) {
-            case ITEM:
-                isItem = true;
-                title.delete(0, title.length());
-                link.delete(0, link.length());
-                description.delete(0, description.length());
+        if (isFresh()) {
 
-                break;
-            case TITLE:
-                isTitle = true;
-                break;
-            case DESCRIPTION:
-                isDescription = true;
-                break;
-            case LINK:
-                isLink = true;
-                break;
+            switch (localName) {
+                case ITEM:
+                    isItem = true;
+                    title.delete(0, title.length());
+                    link.delete(0, link.length());
+                    description.delete(0, description.length());
+
+                    break;
+                case TITLE:
+                    isTitle = true;
+                    break;
+                case DESCRIPTION:
+                    isDescription = true;
+                    break;
+                case LINK:
+                    isLink = true;
+                    break;
+            }
         }
     }
 
@@ -123,24 +136,28 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
             final String qName)
             throws SAXException {
 
-        switch (localName) {
-            case ITEM:
-                final SearchItem item = new SearchItem(link.toString(), title.toString(), description.toString());
-                list.add(item);
-                searchListener.onItemAdded(item);
-                isItem = false;
-                break;
-            case TITLE:
-                isTitle = false;
-                break;
-            case DESCRIPTION:
-                isDescription = false;
-                break;
-            case LINK:
-                isLink = false;
-                break;
-        }
+        if (isFresh()) {
 
+            switch (localName) {
+                case ITEM:
+                    final SearchItem item = new SearchItem(link.toString(), title.toString(), description.toString());
+                    list.add(item);
+                    if (isFresh()) {
+                        searchListener.onItemAdded(item);
+                    }
+                    isItem = false;
+                    break;
+                case TITLE:
+                    isTitle = false;
+                    break;
+                case DESCRIPTION:
+                    isDescription = false;
+                    break;
+                case LINK:
+                    isLink = false;
+                    break;
+            }
+        }
     }
 
     @Override
@@ -150,12 +167,15 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
             final int length)
             throws SAXException {
 
-        if (isItem && isTitle) {
-            title.append(ch, start, length);
-        } else if (isItem && isDescription) {
-            description.append(ch, start, length);
-        } else if (isItem && isLink) {
-            link.append(ch, start, length);
+        if (isFresh()) {
+
+            if (isItem && isTitle) {
+                title.append(ch, start, length);
+            } else if (isItem && isDescription) {
+                description.append(ch, start, length);
+            } else if (isItem && isLink) {
+                link.append(ch, start, length);
+            }
         }
     }
 
