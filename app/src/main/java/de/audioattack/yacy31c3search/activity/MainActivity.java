@@ -32,6 +32,8 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
 
     private static final String QUERY = "QUERY";
     private static final String ICONIFIED = "ICONIFIED";
+
+    private RecyclerView recyclerView;
     private MyAdapter adapter;
 
     private android.support.v7.widget.SearchView searchView;
@@ -52,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -258,7 +260,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onOldResultCleared(final int numberOfResults) {
 
-        runOnUiThread(new Runnable() {
+        recyclerView.post(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyItemRangeRemoved(0, numberOfResults);
@@ -269,7 +271,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
     @Override
     public void onItemAdded(final SearchItem item) {
 
-        runOnUiThread(new Runnable() {
+        recyclerView.post(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyItemInserted(SearchIntentService.SEARCH_RESULT.lastIndexOf(item));
