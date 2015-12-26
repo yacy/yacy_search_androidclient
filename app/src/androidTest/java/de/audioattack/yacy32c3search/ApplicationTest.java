@@ -1,4 +1,4 @@
-package de.audioattack.yacy31c3search;
+package de.audioattack.yacy32c3search;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

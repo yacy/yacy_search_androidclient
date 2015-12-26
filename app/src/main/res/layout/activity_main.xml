@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context="de.audioattack.yacy32c3search.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -41,7 +41,7 @@
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/text_no_results"
-        android:textColor="@color/yacy_blue"
+        android:textColor="@color/accent"
         android:textSize="@dimen/abc_text_size_headline_material"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -55,7 +55,7 @@
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/text_empty"
-        android:textColor="@color/yacy_blue"
+        android:textColor="@color/accent"
         android:textSize="@dimen/abc_text_size_headline_material"
         android:textStyle="bold" />
 

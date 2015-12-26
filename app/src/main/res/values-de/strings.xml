@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">31c3 Suche</string>
+    <string name="app_name">32c3 Suche</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_about">Über</string>
-    <string name="search_title">YaCy search for 31c3</string>
+    <string name="search_title">YaCy search for 32c3</string>
     <string name="search_hint">Suche mit YaCy</string>
     <string name="alert_dialog_ok">OK</string>
-    <string name="about_message"><![CDATA[Powered by <a href=\"http://yacy.net/\">YaCy</a>.<br /><br />Copyright &#169; 2014 <a href="http://low.audioattack.de/">Marc Nause</a><br /><br />This program is free software: you can redistribute it and/or modify
-		it under the terms of the GNU General Public License as published by
-		the Free Software Foundation, either version 3 of the License, or
-		(at your option) any later version.<br /><br />This program is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-		GNU General Public License for more details.<br /><br />You should have received a copy of the GNU General Public License
-		along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.<br /><br />Source code of the app: <a href="https://gitorious.org/31c3-search/">https://gitorious.org/31c3-search</a>]]></string>
     <string name="no_network_title">Kein Netzwerk!</string>
     <string name="no_network_message">Die App kann sich nicht mit dem Suchserver verbinden. Bitte überprüfe die Netzwerkeinstellungen.</string>
     <string name="exception_title">Ooops!</string>
     <string name="exception_message">Ein Problem ist aufgetreten: %s</string>
     <string name="activity_not_found">Auf diesem Gerät ist keine App installiert, die %s-Links unterstützt.</string>
     <string name="text_no_results">Schade, keine Ergebnisse gefunden. :-(</string>
-    <string name="text_empty">Willkommen zur 31c3 Congress-Suche!</string>
-    <string name="settings_host">YaCy-Server (default: 31c3.yacy.net)</string>
+    <string name="text_empty">Willkommen zur 32c3 Congress-Suche!</string>
+    <string name="settings_host">YaCy-Server (default: 32c3.yacy.net)</string>
     <string name="settings_host_hint">host[:port]</string>
     <string name="alert_dialog_dismiss">Abbrechen</string>
 

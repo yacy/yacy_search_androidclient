@@ -1,21 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
-        <item name="colorPrimary">@color/yacy_blue</item>
-        <item name="colorPrimaryDark">@color/dark_blue</item>
-        <item name="colorAccent">@color/yacy_green</item>
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <item name="colorAccent">@color/accent</item>
 
     </style>
 
     <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
-        <item name="actionMenuTextColor">@color/abc_primary_text_material_dark</item>
-        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
-        <item name="background">@color/yacy_blue</item>
+        <item name="android:textColorPrimary">@color/text</item>
+        <item name="actionMenuTextColor">@color/text</item>
+        <item name="android:textColorSecondary">@color/text</item>
+        <item name="background">@color/light</item>
         <!-- Sets background of menu. -->
-        <item name="android:background">@color/yacy_blue</item>
+        <item name="android:background">@color/light</item>
     </style>
 
 </resources>

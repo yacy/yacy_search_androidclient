@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="@color/yacy_blue"
+            android:textColor="@color/accent"
             android:textSize="@dimen/abc_text_size_small_material"
             android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="middle"
             android:singleLine="true"
-            android:textColor="@color/yacy_green"
+            android:textColor="@color/accent"
             android:textSize="@dimen/abc_text_size_caption_material" />
 
         <TextView
@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="false"
+            android:textColor="@color/text"
             android:textSize="@dimen/abc_text_size_small_material" />
 
     </LinearLayout>

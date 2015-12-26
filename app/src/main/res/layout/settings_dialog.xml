@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:text="@string/settings_host"
-        android:textColor="@color/yacy_blue"
+        android:textColor="@color/accent"
         android:textSize="@dimen/abc_text_size_subhead_material"
         android:textStyle="bold" />
 

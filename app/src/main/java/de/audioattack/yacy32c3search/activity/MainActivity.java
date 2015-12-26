@@ -1,4 +1,4 @@
-package de.audioattack.yacy31c3search.activity;
+package de.audioattack.yacy32c3search.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,15 +20,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
-import de.audioattack.yacy31c3search.R;
-import de.audioattack.yacy31c3search.service.SearchIntentService;
-import de.audioattack.yacy31c3search.service.SearchItem;
-import de.audioattack.yacy31c3search.service.SearchListener;
+import de.audioattack.yacy32c3search.R;
+import de.audioattack.yacy32c3search.service.SearchIntentService;
+import de.audioattack.yacy32c3search.service.SearchItem;
+import de.audioattack.yacy32c3search.service.SearchListener;
 
 /**
  * Displays UI of the app.
  */
-public class MainActivity extends ActionBarActivity implements SearchListener {
+public class MainActivity extends AppCompatActivity implements SearchListener {
 
     private static final String QUERY = "QUERY";
     private static final String ICONIFIED = "ICONIFIED";
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements SearchListener {
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
                 super.onScrolled(recyclerView, dx, dy);

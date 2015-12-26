@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.audioattack.yacy31c3search"
+    package="de.audioattack.yacy32c3search"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name="de.audioattack.yacy32c3search.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysHidden|adjustNothing">
@@ -31,7 +31,7 @@
         </activity>
 
         <service
-            android:name=".service.SearchIntentService"
+            android:name="de.audioattack.yacy32c3search.service.SearchIntentService"
             android:enabled="true"
             android:exported="false" />
 

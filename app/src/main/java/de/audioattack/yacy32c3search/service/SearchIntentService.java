@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see  http:// www.gnu.org/licenses/.
  */
-package de.audioattack.yacy31c3search.service;
+package de.audioattack.yacy32c3search.service;
 
 import android.app.IntentService;
 import android.app.SearchManager;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import de.audioattack.yacy31c3search.activity.SettingsDialog;
+import de.audioattack.yacy32c3search.activity.SettingsDialog;
 
 /**
  * @author Marc Nause <marc.nause@gmx.de>

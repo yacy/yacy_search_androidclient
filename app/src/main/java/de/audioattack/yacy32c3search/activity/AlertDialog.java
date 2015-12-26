@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see  http:// www.gnu.org/licenses/.
  */
-package de.audioattack.yacy31c3search.activity;
+package de.audioattack.yacy32c3search.activity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import de.audioattack.yacy31c3search.R;
+import de.audioattack.yacy32c3search.R;
 
 /**
  * Displays all kinds of dialogs in the app.

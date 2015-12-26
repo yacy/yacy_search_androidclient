@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="dark_blue">#ff3C6C9C</color>
-    <color name="yacy_blue">#ff5090D0</color>
-    <color name="light_blue">#ffA8C8E8</color>
-    <color name="very_light_blue">#ffD3E3F3</color>
-    <color name="yacy_green">#ff65AC2A</color>
+    <color name="accent">#fff19224</color>
+    <color name="dark">#f000</color>
+    <color name="light">#f111</color>
+    <color name="text">@android:color/white</color>
 </resources>

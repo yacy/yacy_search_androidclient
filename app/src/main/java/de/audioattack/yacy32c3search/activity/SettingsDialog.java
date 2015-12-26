@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see  http:// www.gnu.org/licenses/.
  */
-package de.audioattack.yacy31c3search.activity;
+package de.audioattack.yacy32c3search.activity;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -28,7 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import de.audioattack.yacy31c3search.R;
+import de.audioattack.yacy32c3search.R;
 
 /**
  * Allows to change settings.
@@ -38,7 +38,7 @@ import de.audioattack.yacy31c3search.R;
 public class SettingsDialog extends DialogFragment {
 
     public static final String KEY_HOST = SettingsDialog.class.getName();
-    public static final String DEFAULT_HOST = "31c3.yacy.net";
+    public static final String DEFAULT_HOST = "32c3.yacy.net";
 
     private View customView;
 
@@ -83,16 +83,9 @@ public class SettingsDialog extends DialogFragment {
         final TextView tvSettingsHost = (TextView) customView.findViewById(R.id.settings_host);
         tvSettingsHost.setText(load(getActivity(), KEY_HOST, DEFAULT_HOST));
 
-        // TODO: find a better way to change text color in custom view
-        final Dialog dialog = getDialog();
-        final int textViewId = dialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
-        final TextView tv = (TextView) dialog.findViewById(textViewId);
-        if (tv != null) {
-            tvSettingsHost.setTextColor(tv.getCurrentTextColor());
-        }
     }
 
-    public static boolean store(final Context context, final String key, final String value) {
+    private static boolean store(final Context context, final String key, final String value) {
         final SharedPreferences.Editor editor = context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit();
         editor.putString(key, Base64.encodeToString(value.getBytes(), Base64.NO_WRAP));
         return editor.commit();
