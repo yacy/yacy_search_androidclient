@@ -13,9 +13,7 @@
         <item name="android:textColorPrimary">@color/text</item>
         <item name="actionMenuTextColor">@color/text</item>
         <item name="android:textColorSecondary">@color/text</item>
-        <item name="background">@color/light</item>
-        <!-- Sets background of menu. -->
-        <item name="android:background">@color/light</item>
+        <item name="background">@color/dark</item>
     </style>
 
 </resources>

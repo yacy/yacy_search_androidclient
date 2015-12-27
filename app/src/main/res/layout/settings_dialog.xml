@@ -14,7 +14,7 @@
         android:singleLine="false"
         android:text="@string/settings_host"
         android:textColor="@color/accent"
-        android:textSize="@dimen/abc_text_size_subhead_material"
+        android:textSize="@dimen/size_subhead"
         android:textStyle="bold" />
 
     <EditText

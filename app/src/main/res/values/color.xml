@@ -2,7 +2,7 @@
 
 <resources>
     <color name="accent">#fff19224</color>
+    <color name="accent_dark">#ffe18214</color>
     <color name="dark">#f000</color>
-    <color name="light">#f111</color>
     <color name="text">@android:color/white</color>
 </resources>

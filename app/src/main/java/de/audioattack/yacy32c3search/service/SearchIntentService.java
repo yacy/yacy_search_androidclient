@@ -175,9 +175,4 @@ public class SearchIntentService extends IntentService {
             }
         }
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

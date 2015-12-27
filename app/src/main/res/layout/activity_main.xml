@@ -42,7 +42,7 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/text_no_results"
         android:textColor="@color/accent"
-        android:textSize="@dimen/abc_text_size_headline_material"
+        android:textSize="@dimen/text_size_headline"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -56,7 +56,7 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/text_empty"
         android:textColor="@color/accent"
-        android:textSize="@dimen/abc_text_size_headline_material"
+        android:textSize="@dimen/text_size_headline"
         android:textStyle="bold" />
 
     <include layout="@layout/include_fab" />

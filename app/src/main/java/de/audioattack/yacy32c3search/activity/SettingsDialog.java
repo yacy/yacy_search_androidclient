@@ -85,10 +85,10 @@ public class SettingsDialog extends DialogFragment {
 
     }
 
-    private static boolean store(final Context context, final String key, final String value) {
+    private static void store(final Context context, final String key, final String value) {
         final SharedPreferences.Editor editor = context.getSharedPreferences("settings", Context.MODE_PRIVATE).edit();
         editor.putString(key, Base64.encodeToString(value.getBytes(), Base64.NO_WRAP));
-        return editor.commit();
+        editor.commit();
     }
 
     public static String load(final Context context, final String key, String dflt) {
