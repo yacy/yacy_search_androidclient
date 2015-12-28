@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.audioattack.yacy32c3search.R;
-import de.audioattack.yacy32c3search.service.SearchItem;
+import de.audioattack.yacy32c3search.parser.SearchItem;
 
 /**
  * Simple adapter for search items.

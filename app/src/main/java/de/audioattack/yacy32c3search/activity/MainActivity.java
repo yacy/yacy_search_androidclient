@@ -21,8 +21,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
 import de.audioattack.yacy32c3search.R;
+import de.audioattack.yacy32c3search.parser.SearchItem;
 import de.audioattack.yacy32c3search.service.SearchIntentService;
-import de.audioattack.yacy32c3search.service.SearchItem;
 import de.audioattack.yacy32c3search.service.SearchListener;
 
 /**

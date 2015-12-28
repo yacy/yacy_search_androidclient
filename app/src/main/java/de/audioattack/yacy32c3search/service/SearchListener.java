@@ -16,6 +16,8 @@
  */
 package de.audioattack.yacy32c3search.service;
 
+import de.audioattack.yacy32c3search.parser.SearchItem;
+
 /**
  * Will be informed about progress in parsing.
  *

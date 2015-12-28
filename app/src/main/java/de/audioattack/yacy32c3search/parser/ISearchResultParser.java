@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see  http:// www.gnu.org/licenses/.
  */
-package de.audioattack.yacy32c3search.service;
+package de.audioattack.yacy32c3search.parser;
 
 import java.io.InputStream;
 
 /**
  * @author Marc Nause <marc.nause@gmx.de>
  */
-interface ISearchResultParser {
+public interface ISearchResultParser {
 
     String getSearchUrlParameter();
 

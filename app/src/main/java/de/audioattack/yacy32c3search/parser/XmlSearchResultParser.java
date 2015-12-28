@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see  http:// www.gnu.org/licenses/.
  */
-package de.audioattack.yacy32c3search.service;
+package de.audioattack.yacy32c3search.parser;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -27,6 +27,9 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import de.audioattack.yacy32c3search.service.SearchIntentService;
+import de.audioattack.yacy32c3search.service.SearchListener;
 
 /**
  * Parser for search items from YaCy search result XML.

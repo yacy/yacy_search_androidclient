@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Locale;
 
 import de.audioattack.yacy32c3search.activity.SettingsDialog;
+import de.audioattack.yacy32c3search.parser.ISearchResultParser;
+import de.audioattack.yacy32c3search.parser.SearchItem;
+import de.audioattack.yacy32c3search.parser.XmlSearchResultParser;
 
 /**
  * @author Marc Nause <marc.nause@gmx.de>
@@ -89,7 +92,7 @@ public class SearchIntentService extends IntentService {
         return id;
     }
 
-    static long getCurrentId() {
+    public static long getCurrentId() {
 
         return id;
     }
