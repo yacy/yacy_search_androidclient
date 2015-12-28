@@ -25,5 +25,6 @@
     <string name="settings_host">YaCy-Server (default: 32c3.yacy.net)</string>
     <string name="settings_host_hint">host[:port]</string>
     <string name="alert_dialog_dismiss">Abbrechen</string>
+    <string name="descr_fab">Öffnet Suchfeld.</string>
 
 </resources>
