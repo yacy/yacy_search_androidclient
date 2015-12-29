@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:paddingBottom="8dp"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="8dp"
-    android:background="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:layout_margin="4dp"
+    android:clickable="true"
+    card_view:cardBackgroundColor="@color/cardview_dark_background"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="@color/accent"
-        android:textSize="@dimen/text_size_small"
-        android:textStyle="bold" />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/tv_url"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="middle"
-        android:singleLine="true"
-        android:textColor="@color/accent"
-        android:textSize="@dimen/text_size_caption" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="false"
-        android:textColor="@color/text"
-        android:textSize="@dimen/text_size_small" />
+        <TextView
+            android:id="@+id/tv_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/text_size_caption" />
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="-8dp"
+            android:layout_marginRight="-8dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/text" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="false"
+            android:textColor="@color/text"
+            android:textSize="@dimen/text_size_small" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

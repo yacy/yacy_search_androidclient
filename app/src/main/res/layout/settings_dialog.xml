@@ -21,6 +21,6 @@
         android:id="@+id/settings_host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textUri"
-        android:hint="@string/settings_host_hint" />
+        android:hint="@string/settings_host_hint"
+        android:inputType="textUri" />
 </LinearLayout>

@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
 
         adapter = new MyAdapter(SearchIntentService.SEARCH_RESULT);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
