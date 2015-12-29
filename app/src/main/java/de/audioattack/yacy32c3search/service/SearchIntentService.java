@@ -17,7 +17,6 @@
 package de.audioattack.yacy32c3search.service;
 
 import android.app.IntentService;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -30,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import de.audioattack.yacy32c3search.activity.SettingsDialog;
 import de.audioattack.yacy32c3search.parser.ISearchResultParser;
@@ -43,6 +43,10 @@ public class SearchIntentService extends IntentService {
 
     private static final String TAG = SearchIntentService.class.getSimpleName();
 
+    public static final String TAG_ID = TAG + "_id";
+
+    public static final String TAG_QUERY = TAG + "_query";
+
     public static String lastSearch;
 
     public static final List<SearchItem> SEARCH_RESULT = new ArrayList<>();
@@ -50,7 +54,7 @@ public class SearchIntentService extends IntentService {
     private static SearchListener searchListener;
     public static boolean isLoading;
 
-    private static volatile long id = Long.MIN_VALUE;
+    private static UUID id;
 
     /**
      * Creates an IntentService.
@@ -59,14 +63,15 @@ public class SearchIntentService extends IntentService {
         super(TAG);
     }
 
-    public static void addSearchListener(final SearchListener listener) {
+    public static void setSearchListener(final SearchListener listener) {
         searchListener = listener;
     }
 
     @Override
     protected void onHandleIntent(final Intent intent) {
 
-        String searchString = intent.getStringExtra(SearchManager.QUERY);
+        String searchString = intent.getStringExtra(TAG_QUERY);
+        id = (UUID) intent.getSerializableExtra(TAG_ID);
         lastSearch = searchString;
         if (searchString != null) {
 
@@ -77,43 +82,27 @@ public class SearchIntentService extends IntentService {
             searchString = searchString.trim().replaceAll("\\s", "+");
 
 
-            search(getNewId(), searchString);
+            search(id, searchString);
         }
     }
 
-    private synchronized long getNewId() {
-
-        if (id < Long.MAX_VALUE) {
-            id++;
-        } else {
-            id = Long.MIN_VALUE;
-        }
-
-        return id;
-    }
-
-    public static long getCurrentId() {
-
-        return id;
-    }
-
-    public static void clearList() {
+    public static void clearList(final UUID id) {
 
         final int numberOfItems = SEARCH_RESULT.size();
 
-        searchListener.onOldResultCleared(numberOfItems);
+        searchListener.onOldResultCleared(id, numberOfItems);
 
         if (numberOfItems > 0) {
             SEARCH_RESULT.clear();
         }
     }
 
-    private void search(final long myId, final String searchString) {
+    private void search(final UUID searchID, final String searchString) {
 
         if (searchString.length() > 0) {
 
             isLoading = true;
-            searchListener.onLoadingData();
+            searchListener.onLoadingData(searchID);
 
             InputStream is = null;
 
@@ -125,7 +114,7 @@ public class SearchIntentService extends IntentService {
                 if (networkInfo != null && networkInfo.isConnected()) {
 
 
-                    final ISearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener, myId);
+                    final ISearchResultParser parser = new XmlSearchResultParser(SEARCH_RESULT, searchListener, searchID);
 
                     final String host = SettingsDialog.load(getApplicationContext(), SettingsDialog.KEY_HOST, SettingsDialog.DEFAULT_HOST);
 
@@ -136,7 +125,7 @@ public class SearchIntentService extends IntentService {
                     conn.setRequestMethod("GET");
                     conn.setDoInput(true);
 
-                    if (myId == getCurrentId()) {
+                    if (searchID.compareTo(getCurrentId()) == 0) {
 
                         conn.connect();
 
@@ -146,24 +135,24 @@ public class SearchIntentService extends IntentService {
                             throw new IOException("Server returned HTTP code " + conn.getResponseCode() + ".");
                         }
 
-                        if (myId == getCurrentId()) {
+                        if (searchID.compareTo(getCurrentId()) == 0) {
 
                             parser.parse(is);
 
-                            searchListener.onFinishedData();
+                            searchListener.onFinishedData(searchID);
                             isLoading = false;
                         }
                     }
 
                 } else {
 
-                    searchListener.onNetworkUnavailable();
+                    searchListener.onNetworkUnavailable(searchID);
                     isLoading = false;
                 }
 
             } catch (Exception e) {
 
-                searchListener.onError(e);
+                searchListener.onError(searchID, e);
                 isLoading = false;
             } finally {
 
@@ -177,5 +166,9 @@ public class SearchIntentService extends IntentService {
                 }
             }
         }
+    }
+
+    public static UUID getCurrentId() {
+        return id;
     }
 }

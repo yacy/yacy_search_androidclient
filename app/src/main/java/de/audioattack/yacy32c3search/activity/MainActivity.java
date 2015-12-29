@@ -13,12 +13,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
+
+import java.util.UUID;
 
 import de.audioattack.yacy32c3search.R;
 import de.audioattack.yacy32c3search.parser.SearchItem;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
     private View noResults;
     private View fab;
     private boolean isFabShowing = true;
+
+    private UUID mySearchId;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
             }
         });
 
-        SearchIntentService.addSearchListener(this);
+        SearchIntentService.setSearchListener(this);
 
         fab = findViewById(R.id.button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
         }
 
         if (SearchIntentService.isLoading) {
-            onLoadingData();
+            onLoadingData(mySearchId);
         }
 
         return true;
@@ -185,12 +190,13 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
     private void doMySearch(final String query) {
 
         if (query != null) {
-            SearchIntentService.clearList();
+            SearchIntentService.clearList(mySearchId);
             emptyView.setVisibility(View.GONE);
             noResults.setVisibility(View.GONE);
             final Intent intent = new Intent(this, SearchIntentService.class);
-            intent.putExtra(SearchManager.QUERY, query);
-            stopService(intent);
+            intent.putExtra(SearchIntentService.TAG_QUERY, query);
+            mySearchId = UUID.randomUUID();
+            intent.putExtra(SearchIntentService.TAG_ID, mySearchId);
             startService(intent);
         }
     }
@@ -205,79 +211,105 @@ public class MainActivity extends AppCompatActivity implements SearchListener {
     }
 
     @Override
-    public void onLoadingData() {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    @Override
-    public void onFinishedData() {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-
-                if (adapter.getItemCount() == 0) {
-                    noResults.setVisibility(View.VISIBLE);
+    public void onLoadingData(final UUID id) {
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
-    public void onError(final Exception ex) {
+    public void onFinishedData(final UUID id) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        progressBar.setVisibility(View.INVISIBLE);
 
-            }
-        });
-
-        AlertDialog.newInstance(R.string.exception_title, R.string.exception_message, ex).show(getSupportFragmentManager(), "no_network");
+                        if (adapter.getItemCount() == 0) {
+                            noResults.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     @Override
-    public void onNetworkUnavailable() {
+    public void onError(final UUID id, final Exception ex) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
 
-            }
-        });
+                }
+            });
 
-        AlertDialog.newInstance(R.string.no_network_title, R.string.no_network_message).show(getSupportFragmentManager(), "no_network");
+            Log.e(MainActivity.class.getSimpleName(), "error getting search data", ex);
+            AlertDialog.newInstance(R.string.exception_title, R.string.exception_message, ex).show(getSupportFragmentManager(), "no_network");
+        }
     }
 
     @Override
-    public void onOldResultCleared(final int numberOfResults) {
+    public void onNetworkUnavailable(final UUID id) {
 
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemRangeRemoved(0, numberOfResults);
-            }
-        });
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+
+            AlertDialog.newInstance(R.string.no_network_title, R.string.no_network_message).show(getSupportFragmentManager(), "no_network");
+        }
     }
 
     @Override
-    public void onItemAdded(final SearchItem item) {
+    public void onOldResultCleared(final UUID id, final int numberOfResults) {
 
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemInserted(SearchIntentService.SEARCH_RESULT.lastIndexOf(item));
-            }
-        });
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        // adapter.notifyItemRangeRemoved(0, numberOfResults);
+                        adapter.notifyDataSetChanged(); // sucks for performance, but fixes problems with IOOBE
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onItemAdded(final UUID id, final SearchItem item, final int position) {
+
+        if (id != null && id.compareTo(mySearchId) == 0) {
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (id.compareTo(mySearchId) == 0) {
+                        noResults.setVisibility(View.GONE);
+                        // adapter.notifyItemInserted(position);
+                        adapter.notifyDataSetChanged(); // sucks for performance, but fixes problems with IOOBE
+                    }
+                }
+            });
+        }
     }
 
     private void hideFab() {

@@ -23,6 +23,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -59,7 +60,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
 
     private final SearchListener searchListener;
 
-    private final long queryId;
+    private final UUID queryId;
 
     /**
      * Constructor.
@@ -69,7 +70,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public XmlSearchResultParser(final List<SearchItem> results, final SearchListener searchListener, final long queryId)
+    public XmlSearchResultParser(final List<SearchItem> results, final SearchListener searchListener, final UUID queryId)
             throws ParserConfigurationException, SAXException {
 
         saxParser = SAXParserFactory.newInstance().newSAXParser();
@@ -93,13 +94,13 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
             }
         } catch (SAXException | IOException e) {
 
-            this.searchListener.onError(e);
+            this.searchListener.onError(queryId, e);
         }
     }
 
     private boolean isFresh() {
 
-        return queryId == SearchIntentService.getCurrentId();
+        return queryId.equals(SearchIntentService.getCurrentId());
     }
 
     @Override
@@ -146,7 +147,7 @@ public class XmlSearchResultParser extends DefaultHandler implements ISearchResu
                     final SearchItem item = new SearchItem(link.toString(), title.toString(), description.toString());
                     list.add(item);
                     if (isFresh()) {
-                        searchListener.onItemAdded(item);
+                        searchListener.onItemAdded(queryId, item, list.indexOf(item));
                     }
                     isItem = false;
                     break;

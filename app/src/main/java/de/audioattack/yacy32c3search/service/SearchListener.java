@@ -16,6 +16,8 @@
  */
 package de.audioattack.yacy32c3search.service;
 
+import java.util.UUID;
+
 import de.audioattack.yacy32c3search.parser.SearchItem;
 
 /**
@@ -28,36 +30,36 @@ public interface SearchListener {
     /**
      * Will be called when loading data starts.
      */
-    void onLoadingData();
+    void onLoadingData(UUID tag);
 
     /**
      * Will be informed when loading and parsing of data has finished
      */
-    void onFinishedData();
+    void onFinishedData(UUID tag);
 
     /**
      * Will be called if retrieving search results failed due to an error.
      *
      * @param ex reason of fail
      */
-    void onError(Exception ex);
+    void onError(UUID tag, Exception ex);
 
     /**
      * Will be called if search results can't be loaded since network is unavailable.
      */
-    void onNetworkUnavailable();
+    void onNetworkUnavailable(UUID tag);
 
     /**
      * Will be called when list of results is cleared.
      *
      * @param numberOfResults number of results which have been cleared from results list.
      */
-    void onOldResultCleared(int numberOfResults);
+    void onOldResultCleared(UUID tag, int numberOfResults);
 
     /**
      * Will be called when an item is added to result list.
      *
      * @param item item which has been added
      */
-    void onItemAdded(SearchItem item);
+    void onItemAdded(UUID tag, SearchItem item, int position);
 }
